@@ -99,6 +99,22 @@ The waitlist form submits masked profile text and competency answers to `POST /a
 
 Without those environment variables, the API intentionally returns `503` rather than reporting a false successful signup.
 
+## 🚀 Deployment Setup
+
+This project is prepared for both Vercel and Netlify.
+
+### Vercel
+1. Push this repository to GitHub.
+2. Import the repo into Vercel.
+3. Set the environment variables from [`.env.example`](.env.example) in the Vercel dashboard.
+4. Use the default Next.js build settings.
+
+### Netlify
+1. Add the repository to Netlify.
+2. Set the same environment variables in Site settings → Environment variables.
+3. Use the default build command: `npm run build`.
+4. The repo includes a [`netlify.toml`](netlify.toml) file so the Netlify Next.js plugin is configured automatically.
+
 ## 🧪 Experimental Product Capabilities
 
 The local experiment currently includes:
