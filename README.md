@@ -11,7 +11,7 @@ FoundersRadar is a global, mass-market B2C SaaS platform ($14.99/month) designed
 **CRITICAL STRATEGIC FOCUS:** We are currently in the **Pre-Seed / Pre-Launch Validation phase**. 
 To protect company capital and safeguard intellectual property from competitors, **DO NOT connect or deploy live third-party LLM APIs (OpenAI/Anthropic) to the frontend client.** 
 
-This version of the codebase acts exclusively as a **High-Conversion Validation Engine** embedded into the existing company website's `SERVICES` section to build a user waitlist.
+This version of the codebase acts as a **local experimental matching engine** embedded into the existing company website's `SERVICES` section. It uses a curated sample dataset and does not claim to provide objective business validation.
 
 ---
 
@@ -85,6 +85,33 @@ Break the development into individual atomic checkpoints. Run the development en
 | `email` | `text` | UNIQUE, NOT NULL | Cleaned target user user email. |
 | `profile_payload_masked` | `text` | NULLABLE | Anonymized user professional text. |
 | `competency_scores` | `jsonb` | NULLABLE | Object recording core onboarding paths. |
+
+---
+
+## 🔌 Backend Setup
+
+The waitlist form submits masked profile text and competency answers to `POST /api/waitlist`. The route validates the payload server-side and upserts by email through Supabase using the service-role key. The service-role key must remain server-only and must never use a `NEXT_PUBLIC_` prefix.
+
+1. Create a Supabase project.
+2. Run [`supabase/migrations/001_create_foundersradar_waitlist.sql`](supabase/migrations/001_create_foundersradar_waitlist.sql) in the Supabase SQL editor.
+3. Copy [`.env.example`](.env.example) to `.env.local` and fill in the project URL and service-role key.
+4. Start the app with `npm run dev`.
+
+Without those environment variables, the API intentionally returns `503` rather than reporting a false successful signup.
+
+## 🧪 Experimental Product Capabilities
+
+The local experiment currently includes:
+
+*   A deterministic matcher at `POST /api/matches` using four curated startup patterns.
+*   Ranked match results with fit scores, matched strengths, gaps, and six-month roadmaps.
+*   PDF, DOCX, and TXT resume parsing at `POST /api/parse-resume`, with on-device/server-boundary masking.
+*   A Supabase Auth-shaped sign-in screen at `/auth` for the future magic-link integration.
+*   Supabase migrations for profiles, saved matches, and match history.
+*   A local analytics event buffer and an LLM provider interface with a no-cost template fallback.
+*   Vitest coverage for the matcher and common PII masking behavior.
+
+The sample startup patterns are intentionally illustrative. Replace them with reviewed, licensed data before presenting match scores as research-backed recommendations. The LLM adapter is also disabled by default; adding a provider requires a server-side key, privacy review, rate limits, and output evaluation.
 
 ***
 
